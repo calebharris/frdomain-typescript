@@ -1,0 +1,10 @@
+{
+  "name": "frdomain-typescript",
+  "version": "0.0.1",
+  "description": "Examples from Functional and Reactive Domain Modeling in TypeScript",
+  "dependencies": {
+    "@types/node": "^8.0.7",
+    "ts-node": "^3.1.0",
+    "typescript": "^2.4.0"
+  }
+}
