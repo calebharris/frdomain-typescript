@@ -4,7 +4,6 @@ import * as Decimal from "decimal.js";
 
 // Use Result from space-lift to fill in for Scala's Try monad
 import { Result, Ok, Err } from "space-lift";
-/* tslint:disable:max-classes-per-file */
 
 const today = new Date();
 

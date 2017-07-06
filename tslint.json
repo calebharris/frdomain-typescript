@@ -5,10 +5,10 @@
   ],
   "jsRules": {},
   "rules": {
-    "ordered-imports": false,
-    "object-literal-sort-keys": false,
     "align": [true, "parameters", "arguments"],
-    "no-console": false
+    "max-classes-per-file": false,
+    "no-console": false,
+    "ordered-imports": false
   },
   "rulesDirectory": []
 }
