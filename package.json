@@ -3,8 +3,12 @@
   "version": "0.0.1",
   "description": "Examples from Functional and Reactive Domain Modeling in TypeScript",
   "dependencies": {
+    "@types/decimal.js": "0.0.30",
     "@types/node": "^8.0.7",
+    "decimal.js": "^7.2.3",
+    "space-lift": "^0.3.1",
     "ts-node": "^3.1.0",
+    "tslint": "^5.4.3",
     "typescript": "^2.4.0"
   }
 }
