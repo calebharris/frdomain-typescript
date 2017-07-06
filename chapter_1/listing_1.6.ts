@@ -1,20 +1,29 @@
+// Use decimal.js to fill in for Java's BigDecimal, used extensively in the
+// examples
 import * as Decimal from "decimal.js";
-import { Result, Ok, Err } from "space-lift";
 
+// Use Result from space-lift to fill in for Scala's Try monad
+import { Result, Ok, Err } from "space-lift";
 /* tslint:disable:max-classes-per-file */
 
 const today = new Date();
 
-class Amount extends Decimal {
-  public inspect() {
-    return this.toString();
-  }
-}
+// We want to alias both the Decimal type and the Decimal value
+// (i.e. Decimal's constructor function)
+type Amount = decimal.Decimal;
+const Amount = Decimal;
 
 class Balance {
   constructor(readonly amount: Amount = new Amount(0)) { }
+
+  // Added to make output more meaningful
+  public inspect() {
+    return `Balance { amount: ${this.amount.toString()} }`;
+  }
 }
 
+// Added because space-lift's Result requires two types:
+// an error type and a value type
 class AccountError {
   constructor(
     readonly msg: string,
@@ -25,6 +34,7 @@ class AccountError {
   }
 }
 
+// BEGIN - emulate the copy() method Scala adds to case classes
 type _MutableInner<T extends { [x: string]: any }, K extends string> = {
   [P in K]: T[P];
 };
@@ -32,19 +42,25 @@ type _MutableInner<T extends { [x: string]: any }, K extends string> = {
 type Mutable<T> = _MutableInner<T, keyof T>;
 
 abstract class Copyable<T> {
+  // We need the subtype to tell us how to make a copy, because there is no
+  // general algorithm to map object properties to positional parameters in
+  // the constructor, outside of some truly ugly function.toString() parsing
   public abstract copy(): T;
 
   public copyWith(props: Partial<T>): T {
-      const c = this.copy() as Mutable<T>;
-      let k: keyof T;
-      for (k in props) {
-        if (typeof props[k] !== "undefined") {
-          c[k] = props[k]!;
-        }
+    // Temporarily consider the copy mutable in order to apply the passed-in
+    // property overrides
+    const c = this.copy() as Mutable<T>;
+    let k: keyof T;
+    for (k in props) {
+      if (typeof props[k] !== "undefined") {
+        c[k] = props[k]!;
       }
-      return c as T;
+    }
+    return c as T;
   }
 }
+// END - copy() method emulation
 
 class Account extends Copyable<Account> {
   constructor(
