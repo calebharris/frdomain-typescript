@@ -27,3 +27,21 @@ export abstract class Copyable<T> {
     return c as T;
   }
 }
+
+export interface ILens<O, V> {
+  get(obj: O): V;
+  set(obj: O, value: V): O;
+}
+
+export function Lens<T extends Copyable<T>>(prop: keyof T): ILens<T, T[keyof T]> {
+  return {
+    get: (obj: T) => {
+      return obj[prop];
+    },
+    set: (obj: T, value: T[keyof T]) => {
+      const props: Partial<T> = {};
+      props[prop] = value;
+      return obj.copyWith(props);
+    },
+  };
+}
