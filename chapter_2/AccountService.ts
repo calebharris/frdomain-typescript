@@ -22,7 +22,8 @@ export interface IAccountService {
 }
 
 // Listing 3.3: "The interpreter of your algebra"
-export const AccountService: IAccountService = {
+// Object.freeze maybe has a similar effect to sealing the trait in Scala?
+export const AccountService = Object.freeze({
   open: (no: string, name: string, openingDate: Option<Date>) => {
     const today = new Date();
     if (no.length === 0 || name.length === 0) {
@@ -68,6 +69,6 @@ export const AccountService: IAccountService = {
       this.credit(to, amount).flatMap( (b) =>
         Ok([a, b, amount] as [Account, Account, Amount])));
   },
-};
+} as IAccountService);
 
 export { Amount, Balance, Account };
