@@ -8,6 +8,7 @@
     "align": [true, "parameters", "arguments"],
     "max-classes-per-file": false,
     "no-console": false,
+    "object-literal-sort-keys": false,
     "ordered-imports": false
   },
   "rulesDirectory": []
