@@ -42,7 +42,7 @@ export const AccountService = Object.freeze({
       return Err(new AccountError(`Close date ${cd} cannot be before opening` +
         `date ${account.dateOfOpen}`));
     } else {
-      return Ok(account.copyWith({dateOfClose: Some(cd)}));
+      return Ok(account.copy({dateOfClose: Some(cd)}));
     }
   },
 
@@ -50,12 +50,12 @@ export const AccountService = Object.freeze({
     if (a.balance.amount.lt(amt)) {
       return Err(new AccountError("Insufficient balance"));
     } else {
-      return Ok(a.copyWith({balance: new Balance(a.balance.amount.minus(amt))}));
+      return Ok(a.copy({balance: new Balance(a.balance.amount.minus(amt))}));
     }
   },
 
   credit: (a: Account, amt: Amount) => {
-    return Ok(a.copyWith({balance: new Balance(a.balance.amount.plus(amt))}));
+    return Ok(a.copy({balance: new Balance(a.balance.amount.plus(amt))}));
   },
 
   balance: (account: Account) => {

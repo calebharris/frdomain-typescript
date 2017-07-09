@@ -33,10 +33,6 @@ export class Account extends Copyable<Account> {
     super();
   }
 
-  public copy() {
-    return new Account(this.no, this.name, this.dateOfOpen, this.dateOfClose, this.balance) as this;
-  }
-
   public inspect() {
     return `Account {
   no: ${util.inspect(this.no)},
