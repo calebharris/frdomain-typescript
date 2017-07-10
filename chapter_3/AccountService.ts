@@ -67,7 +67,8 @@ export const AccountService = Object.freeze({
   },
 
   // Due to the this: type assertion, which is necessary to prevent this' type
-  // from being as <any>, transfer cannot be implemented as an arrow function
+  // from being inferred as <any>, transfer cannot be implemented as an arrow
+  // function
   transfer(this: IAccountService, from: Account, to: Account, amount: Amount) {
     return this.debit(from, amount).flatMap( (a) =>
       this.credit(to, amount).flatMap( (b) =>
