@@ -13,8 +13,10 @@ import * as util from "util";
 export type Amount = decimal.Decimal;
 export const Amount = Decimal;
 
-export class Balance {
-  constructor(readonly amount: Amount = new Amount(0)) { }
+export class Balance extends Copyable {
+  constructor(readonly amount: Amount = new Amount(0)) {
+    super();
+  }
 
   // Added to make output more meaningful
   public inspect() {
