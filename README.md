@@ -1,4 +1,4 @@
-#TypeScript-ified Examples from _Functional and Reactive Domain Modeling_
+# TypeScript-ified Examples from _Functional and Reactive Domain Modeling_
 
 I'm reading a great book, 
 [Functional and Reactive Domain Modeling](https://www.manning.com/books/functional-and-reactive-domain-modeling),
@@ -11,7 +11,7 @@ However, I am not an expert in Scala, nor in TypeScript, so these examples might
 terrible.  Please feel free to submit issues to point out my horrid mistakes, or pull
 requests to fix them.
 
-##Running the Examples
+## Running the Examples
 
 I haven't got around to defining npm scripts yet, so in order to run the examples, you'll
 want to, after running `npm install`, install TypeScript and ts-node globally:
