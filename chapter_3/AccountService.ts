@@ -16,9 +16,7 @@ export interface IAccountService {
   credit(account: Account, amount: Amount): Result<AccountError, Account>;
   balance(account: Account): Result<AccountError, Balance>;
 
-  // Without this syntax, the type of `this` in the implementation is inferred
-  // as <any>
-  transfer(this: IAccountService, from: Account, to: Account, amount: Amount):
+  transfer(from: Account, to: Account, amount: Amount):
       Result<AccountError, [Account, Account, Amount]>;
 }
 
@@ -68,9 +66,9 @@ export const AccountService = Object.freeze({
     return Err(new AccountError("Not implemented"));
   },
 
-  // Due to the this: type assertion in the interface, transfer cannot be
-  // implemented as an arrow function
-  transfer(from: Account, to: Account, amount: Amount) {
+  // Due to the this: type assertion, which is necessary to prevent this' type
+  // from being as <any>, transfer cannot be implemented as an arrow function
+  transfer(this: IAccountService, from: Account, to: Account, amount: Amount) {
     return this.debit(from, amount).flatMap( (a) =>
       this.credit(to, amount).flatMap( (b) =>
         Ok([a, b, amount] as [Account, Account, Amount])));
