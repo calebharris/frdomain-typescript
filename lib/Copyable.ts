@@ -22,15 +22,29 @@ export interface ILens<O, V> {
   set(obj: O, value: V): O;
 }
 
-export function Lens<T extends Copyable>(prop: keyof T): ILens<T, T[keyof T]> {
+export function Lens<O extends Copyable>(prop: keyof O): ILens<O, O[keyof O]> {
   return {
-    get: (obj: T) => {
+    get: (obj: O) => {
       return obj[prop];
     },
-    set: (obj: T, value: T[keyof T]) => {
-      const props: Partial<T> = {};
+    set: (obj: O, value: O[keyof O]) => {
+      const props: Partial<O> = {};
       props[prop] = value;
       return obj.copy(props);
+    },
+  };
+}
+
+export function Compose<O, I, V>(
+  outer: ILens<O, I>,
+  inner: ILens<I, V>,
+): ILens<O, V> {
+  return {
+    get: (obj: O) => {
+     return inner.get(outer.get(obj));
+    },
+    set: (obj: O, value: V) => {
+      return outer.set(obj, inner.set(outer.get(obj), value));
     },
   };
 }
