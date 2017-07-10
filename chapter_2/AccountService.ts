@@ -1,5 +1,6 @@
 import { Result, Ok, Err, Option, Some, None } from "space-lift";
 import { Amount, Balance, Account } from "./AccountModels";
+import { ILens, Lens, Compose} from "../lib/Copyable";
 
 export class AccountError {
   constructor(readonly message: string) { }
@@ -20,6 +21,11 @@ export interface IAccountService {
   transfer(this: IAccountService, from: Account, to: Account, amount: Amount):
       Result<AccountError, [Account, Account, Amount]>;
 }
+
+// Lenses from later in chapter 3
+const accountBalanceLens = Lens<Account>("balance");
+const balanceAmountLens = Lens<Balance>("amount");
+const accountAmountLens = Compose(accountBalanceLens, balanceAmountLens);
 
 // Listing 3.3: "The interpreter of your algebra"
 // Object.freeze maybe has a similar effect to sealing the trait in Scala?
@@ -50,12 +56,12 @@ export const AccountService = Object.freeze({
     if (a.balance.amount.lt(amt)) {
       return Err(new AccountError("Insufficient balance"));
     } else {
-      return Ok(a.copy({balance: new Balance(a.balance.amount.minus(amt))}));
+      return Ok(accountAmountLens.set(a, a.balance.amount.minus(amt)));
     }
   },
 
   credit: (a: Account, amt: Amount) => {
-    return Ok(a.copy({balance: new Balance(a.balance.amount.plus(amt))}));
+    return Ok(accountAmountLens.set(a, a.balance.amount.plus(amt)));
   },
 
   balance: (account: Account) => {
