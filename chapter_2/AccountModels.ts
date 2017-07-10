@@ -22,7 +22,7 @@ export class Balance {
   }
 }
 
-export class Account extends Copyable<Account> {
+export class Account extends Copyable {
   constructor(
     readonly no: string,
     readonly name: string,
