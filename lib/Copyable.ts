@@ -1,7 +1,14 @@
 // Copyable.ts
 // Provide base class and copy method for conveniently creating new objects
-// as modified copies of originals.  Intended to be used with immutable type.
+// as modified copies of originals.  Intended to be used with immutable types.
+
 export abstract class Copyable {
+  // Without this, the property accesses in equals() trigger an
+  // implicit any error in the compiler
+  [name: string]: any;
+
+  readonly _copyableBrand: string = "";
+
   public copy(props?: Partial<this>): this {
     const pdm = Object.getOwnPropertyNames(this).reduce(
       (map, name) => {
@@ -14,6 +21,21 @@ export abstract class Copyable {
       },
       {} as PropertyDescriptorMap);
     return Object.create(Object.getPrototypeOf(this), pdm);
+  }
+
+  public equals(that: this): boolean {
+    let equal = true;
+    for (let name of Object.getOwnPropertyNames(this)) {
+      const thisVal = this[name], thatVal = that[name];
+      console.log(`name: ${name}, thisVal: ${thisVal}, thatVal: ${thatVal}`);
+      if (thisVal instanceof Copyable && thatVal instanceof Copyable) {
+        equal = equal && thisVal.equals(thatVal);
+      } else {
+        equal = equal && thisVal === thatVal;
+      }
+      if (!equal) return false;
+    }
+    return equal;
   }
 }
 
